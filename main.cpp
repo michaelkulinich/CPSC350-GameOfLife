@@ -16,65 +16,102 @@ int main(int argc, char const *argv[]) {
   cout << "Designed in the 1970s: A Simulation of Bacterial Life Cycle" << endl;
   cout << "\n" << endl;
   cout << "\n" << endl;
-  cout << "Press a 'I' to import a map file or 'R' random assignment: ";
   char progStartChoice;
-  cin >> progStartChoice;
   char **currentGrid;
   char **nextGrid;
   string fileName;
   int rowDimension;
   int columnDimension;
+  double popDensity;
+  bool valid; //used for error checking
 
-
-  if (progStartChoice == 'I')
+  while(true)
   {
-    cout << "You chose " << progStartChoice << endl;
-    cout << "Insert File name: " << endl;
-    cin >> fileName;
+    cout << "Press a 'I' to import a map file or 'R' random assignment: ";
+    cin >> progStartChoice;
 
-    FileHelper helper(fileName);
-    helper.setGrid();  //take out the print statements
-    currentGrid = helper.getCurrentGrid();
-    nextGrid = helper.getNextGrid();
+    //If the user wants to import file
+    if (toupper(progStartChoice) == 'I')
+    {
+      cout << "You chose " << progStartChoice << endl;
+      cout << "Insert File name: " << endl;
+      cin >> fileName;
+      FileHelper helper(fileName);
+      helper.setGrid();  //take out the print statements
+      cout << "Importing map file..." << endl;
+      currentGrid = helper.getCurrentGrid();
+      nextGrid = helper.getNextGrid();
+      rowDimension = helper.getRow();
+      columnDimension = helper.getColumn();
+      Simulation sim(currentGrid, nextGrid, rowDimension, columnDimension);
+      sim.run();
+      break;
+    }
 
-    rowDimension = helper.getRow();
-    columnDimension = helper.getColumn();
+    else if (toupper(progStartChoice) == 'R')
+    {
+      cout << "You chose " << progStartChoice << endl;
+  	  valid = false;
+  	  while (!valid)
+  	  {
+  		    valid = true; //Assume the cin will be an integer.
+  		    cout << "Enter Row Dimension" << endl;
+  		    cin >> rowDimension;
 
-    Simulation sim(currentGrid, nextGrid, rowDimension, columnDimension);
-    sim.run();
+  		    if(cin.fail()) //cin.fail() checks to see if the value in the cin
+  					//stream is the correct type, if not it returns true,
+  					//false otherwise.
+  	    	{
+            cin.clear(); //This corrects the stream.
+  			    cin.ignore(); //This skips the left over stream data.
+            cout << endl;
+  			    cout << "Please enter an Integer only." << endl;
+  			    valid = false; //The cin was not an integer so try again.
+  		}
+  	}
+      valid = false;
+      while (!valid)
+      {
+          valid = true;
+          cout << "Enter Column Dimension" << endl;
+          cin >> columnDimension;
 
-    cout << "Importing map file..." << endl;
+          if(cin.fail())
+          {
+            cin.clear();
+            cin.ignore();
+            cout << endl;
+            cout << "Please enter an Integer only." << endl;
+            valid = false;
+      }
+    }
+      valid = false;
+      while (!valid)
+      {
+          valid = true;
+          cout << "Enter initial population density decimal (0,1]";
+          cin >> popDensity;
+          if(cin.fail())
+          {
+            cin.clear();
+            cin.ignore();
+            cout << "Please enter a double only." << endl;
+            valid = false;
+          }
+      }
+
+      RandGrid grid(rowDimension, columnDimension, popDensity);
+      currentGrid = grid.getCurrentGrid();
+      nextGrid = grid.getNextGrid();
+      Simulation sim(currentGrid, nextGrid, rowDimension, columnDimension);
+      sim.run();
+      break;
+
+
+    }
+    else{
+      cout << "Incorrect input, try again" << endl;
+    }
   }
-
-  else if (progStartChoice == 'R')
-  {
-    cout << "You chose " << progStartChoice << endl;
-    cout << "Enter Row Dimension" << endl;
-    cin >> rowDimension;
-    cout << "Enter Column Dimension" << endl;
-    cin >> columnDimension;
-    cout << "Enter initial population density decimal (0,1]";
-    double popDensity;
-    cin >> popDensity;
-    RandGrid grid(rowDimension, columnDimension, popDensity);
-    currentGrid = grid.getCurrentGrid();                         //is this sketch?? memory leak
-    nextGrid = grid.getNextGrid();
-    Simulation sim(currentGrid, nextGrid, rowDimension, columnDimension);
-    sim.run();
-
-
-  }
-
-
-
-//  int mode;
-  //cout << "What kind of gamemode will you want"      ask in run
-
-
-
-
-
-
-
   return 0;
 }

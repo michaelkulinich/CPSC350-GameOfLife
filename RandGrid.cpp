@@ -11,22 +11,25 @@ RandGrid::RandGrid(int rowDim, int colDim, double popDensity)
   int columnDimension = colDim;
   double randProbability;
 
-//declaring the current grid
+// Declaring the current grid
   myCurrentGrid = new char*[rowDimension+2];
   for(int i = 0; i < rowDimension+2; ++i)
       myCurrentGrid[i] = new char[columnDimension+2];
 
-  //declaring the next grid
+// Declaring the next grid
   myNextGrid = new char*[rowDimension+2];
   for(int i = 0; i < rowDimension+2; ++i)
       myNextGrid[i] = new char[columnDimension+2];
 
 
-
+// Filling up the rows and columns of current grid and next grid
+// based off of the random probability and comparing it to the population
+// density that was inputted by the user
   for (int i = 0; i<rowDimension+2; ++i)
   {
     for (int j = 0; j<columnDimension+2; ++j)
     {
+// Initially, each grid is first filled fully with -'s
       randProbability = (RAND_MAX - rand())/ static_cast<double>(RAND_MAX);
       if(i == 0){
         myCurrentGrid[i][j] = '-';
@@ -45,6 +48,8 @@ RandGrid::RandGrid(int rowDim, int colDim, double popDensity)
         myNextGrid[i][j] = '-';
       }
 
+// Fills grid with X's based on the comparison between a random probability
+// and the population density desired by the user
       else if (randProbability < popDensity)
       {
         myCurrentGrid[i][j] = 'X';
@@ -58,60 +63,15 @@ RandGrid::RandGrid(int rowDim, int colDim, double popDensity)
       }
 
     }
-
   }
-
-
 }
 
 char** RandGrid::getCurrentGrid()
 {
-
   return myCurrentGrid;
 }
+
 char** RandGrid::getNextGrid()
 {
   return myNextGrid;
 }
-
-
-  RandGrid::~RandGrid(){
-    // for(int i = 0; i < rowDimension + 2; ++i) {
-    //     delete [] myCurrentGrid[i];
-    //     delete [] myNextGrid[i];
-    // }
-    // delete [] myNextGrid;
-    // delete [] myCurrentGrid;
-  }
-
-
-
-
-
-
-  //char updateGrid();
-  //char printGrid();
-
-
-
-
-
-  // test to show there is a box around our array
-
-
-  // for (int i = 0; i < columnDimension+2; ++i)
-  // {
-  //   myGrid[rowDimension+1][i] = 'X';
-  //
-  // }
-  //
-  // for (int i = 0; i<rowDimension+2; ++i)
-  // {
-  //   for (int j = 0; j<columnDimension+2; ++j)
-  //   {
-  //     cout << myGrid[i][j];
-  //   }
-  //   cout << endl;
-  // }
-
-  //  cout << "check 3\n";

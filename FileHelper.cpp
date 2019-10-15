@@ -1,5 +1,17 @@
+/*Michael Kulinich
+2328386
+kulinich@chapman.edu
+Matthew Nwerem
+2277158
+nwere100@mail.chapman.edu
+
+
+FileHelper.cpp
+This is cpp file for FileHelper class
+*/
+
 #include "FileHelper.h"
-#include <fstream>
+
 
 using namespace std;
 
@@ -11,14 +23,13 @@ FileHelper::FileHelper(string fileName)
 
 void FileHelper::setGrid()
 {
-  string line;
-  int lineCount = 0;
-
+  string line; //used to read line by line from file
+  int lineCount = 0; //find what line is being read in the file
   inFile.open(inputFile);
 
   if(!inFile)
   {
-    cout << "unable to open file: " << inputFile;
+    cout << "unable to open file: " << inputFile << endl;
     exit(1);
   }
 
@@ -26,12 +37,12 @@ void FileHelper::setGrid()
   {
       if(lineCount == 0)
       {
-        rowDimension = stoi(line); //????????????????????????????
+        rowDimension = stoi(line);
         ++lineCount;
       }
       else
       {
-        columnDimension = stoi(line);//???????????????????
+        columnDimension = stoi(line);
         lineCount = 0;
         break;
       }
